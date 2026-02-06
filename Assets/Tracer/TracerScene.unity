@@ -706,7 +706,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &410087040
 Light:
   m_ObjectHideFlags: 0
@@ -1578,9 +1578,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2118255263}
-        m_TargetAssemblyTypeName: TracerManager, Assembly-CSharp
-        m_MethodName: ShootTracer
+      - m_Target: {fileID: 2118255265}
+        m_TargetAssemblyTypeName: SmokeTracerManager, Assembly-CSharp
+        m_MethodName: Fire
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1746,7 +1746,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2118255264}
-  - component: {fileID: 2118255263}
+  - component: {fileID: 2118255265}
   m_Layer: 0
   m_Name: TracerManager
   m_TagString: Untagged
@@ -1754,26 +1754,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2118255263
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2118255262}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e34de466ce59f440a1cd5d173f95a8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tracerPrefab: {fileID: 8265752105805828493, guid: 1660036b46c79a24b995282bbb383f57, type: 3}
-  lifeTime: 0.47
-  width: 0.2
-  tracerColor: {r: 68.5935, g: 68.5935, b: 68.5935, a: 1}
-  pointsCount: 14
-  noiseScale: 1.11
-  firePoint: {fileID: 1709434737}
-  targetPoint: {fileID: 1485253677}
 --- !u!4 &2118255264
 Transform:
   m_ObjectHideFlags: 0
@@ -1789,6 +1769,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2118255265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2118255262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddb23775de0e5584195fe15f8e842d60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smokePrefab: {fileID: 8265752105805828493, guid: 1660036b46c79a24b995282bbb383f57, type: 3}
+  firePoint: {fileID: 1709434737}
+  targetPoint: {fileID: 1485253677}
+  smokeDuration: 2
+  fadeGradient:
+    serializedVersion: 2
+    key0: {r: 0.745283, g: 0.745283, b: 0.745283, a: 1}
+    key1: {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 0.84313726}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
