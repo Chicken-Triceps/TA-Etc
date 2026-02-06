@@ -3,65 +3,115 @@ using System.Collections;
 
 public class SmokeTracerManager : MonoBehaviour
 {
-    [Header("필수 연결")]
-    public GameObject smokePrefab;   // 아까 만든 Line Renderer 프리팹
-    public Transform firePoint;      // 시작점 (총구)
-    public Transform targetPoint;    // 끝점 (과녁)
+    [Header("---- 프리팹 연결 ----")]
+    public GameObject smokePrefab;   // (기존) 구겨지는 연기 프리팹
+    public GameObject tracerPrefab;  // (필수) 빛나는 직선 탄도 프리팹
+    public Transform firePoint;
+    public Transform targetPoint;
 
-    [Header("연기 설정")]
-    public float smokeDuration = 1.0f; // 연기가 사라지는 데 걸리는 시간
-    [Tooltip("왼쪽 Alpha=255, 오른쪽 Alpha=0 으로 설정하세요")]
-    public Gradient fadeGradient;      // 투명해지는 애니메이션용
+    [Header("---- 연기 설정 (Smoke) ----")]
+    public float smokeDuration = 0.5f;   // 연기 수명
+    public float smokeWidth = 0.1f;      // 연기 두께
+    [Range(10, 100)] public int resolution = 50; // 연기 품질 (점 개수)
 
-    // 버튼에 연결할 함수
+    [Header("---- 탄도 설정 (Tracer) ----")]
+    public float tracerDuration = 0.1f;  // 탄도 수명 (짧을수록 빠름, 0.05 ~ 0.1 추천)
+    public float tracerWidth = 0.02f;    // 탄도 두께 (아주 얇게 추천)
+    [ColorUsage(true, true)]
+    public Color tracerColor = Color.yellow; // 탄도 색상 (HDR 지원, 인스펙터에서 밝기 조절 가능)
+
+
     public void Fire()
     {
         if (firePoint != null && targetPoint != null)
         {
-            StartCoroutine(SpawnSmokeTrail(firePoint.position, targetPoint.position));
+            // 1. 연기 발생 (천천히, 구겨짐)
+            StartCoroutine(SpawnSmoke(firePoint.position, targetPoint.position));
+
+            // 2. 탄도 발생 (빠르게, 직선, 빛남)
+            if (tracerPrefab != null)
+            {
+                StartCoroutine(SpawnBulletTracer(firePoint.position, targetPoint.position));
+            }
         }
     }
 
-    IEnumerator SpawnSmokeTrail(Vector3 start, Vector3 end)
+    // ==================================================================================
+    // 1. 연기 생성 로직 (기존 쉐이더용 점 배치)
+    // ==================================================================================
+    IEnumerator SpawnSmoke(Vector3 start, Vector3 end)
     {
-        // 1. 연기 프리팹 생성
         GameObject smoke = Instantiate(smokePrefab, start, Quaternion.identity);
         LineRenderer lr = smoke.GetComponent<LineRenderer>();
 
-        // 2. 시작점과 끝점 연결
-        lr.positionCount = 2;
-        lr.SetPosition(0, start);
-        lr.SetPosition(1, end);
+        lr.positionCount = resolution;
+        lr.widthMultiplier = smokeWidth;
+        lr.useWorldSpace = true;
 
-        // 3. 서서히 사라지는 효과 (Erosion 발동)
+        for (int i = 0; i < resolution; i++)
+        {
+            float t = (float)i / (resolution - 1);
+            lr.SetPosition(i, Vector3.Lerp(start, end, t));
+        }
+
         float timer = 0f;
         while (timer < smokeDuration)
         {
             timer += Time.deltaTime;
-            float progress = timer / smokeDuration; // 0.0 ~ 1.0
+            float progress = timer / smokeDuration;
 
-            // 쉐이더의 침식 효과를 위해 Alpha를 점점 줄임
-            ApplyGradientFade(lr, progress);
+            // 투명도 1 -> 0
+            float alpha = Mathf.Lerp(1f, 0f, progress);
+            SetLineColorAlpha(lr, Color.white, alpha); // 연기는 쉐이더 색상을 따름 (White)
 
             yield return null;
         }
-
         Destroy(smoke);
     }
 
-    // 그라데이션 알파값만 깎아내리는 함수 (변경 없음)
-    void ApplyGradientFade(LineRenderer lr, float progress)
+    // ==================================================================================
+    // 2. 탄도 생성 로직 (서서히 사라지는 직선)
+    // ==================================================================================
+    IEnumerator SpawnBulletTracer(Vector3 start, Vector3 end)
+    {
+        GameObject tracer = Instantiate(tracerPrefab, start, Quaternion.identity);
+        LineRenderer lr = tracer.GetComponent<LineRenderer>();
+
+        // 탄도는 직선이므로 점 2개면 충분
+        lr.positionCount = 2;
+        lr.SetPosition(0, start);
+        lr.SetPosition(1, end);
+
+        // ★ 여기서 탄도의 두께를 적용
+        lr.widthMultiplier = tracerWidth;
+        lr.useWorldSpace = true;
+
+        float timer = 0f;
+        // ★ 여기서 탄도의 수명(tracerDuration) 동안 루프
+        while (timer < tracerDuration)
+        {
+            timer += Time.deltaTime;
+            float progress = timer / tracerDuration; // 0.0 ~ 1.0
+
+            // 서서히 사라지게 만들기 (Alpha 1 -> 0)
+            float alpha = Mathf.Lerp(1f, 0f, progress);
+
+            // 사용자가 설정한 HDR 색상과 Alpha 적용
+            SetLineColorAlpha(lr, tracerColor, alpha);
+
+            yield return null;
+        }
+        Destroy(tracer);
+    }
+
+    // 색상과 투명도를 한 번에 적용하는 함수
+    void SetLineColorAlpha(LineRenderer lr, Color color, float alpha)
     {
         Gradient gradient = new Gradient();
-        GradientColorKey[] colors = fadeGradient.colorKeys;
-        GradientAlphaKey[] alphas = fadeGradient.alphaKeys;
-
-        for (int i = 0; i < alphas.Length; i++)
-        {
-            alphas[i].alpha *= (1.0f - progress);
-        }
-
-        gradient.SetKeys(colors, alphas);
+        gradient.SetKeys(
+            new GradientColorKey[] { new GradientColorKey(color, 0f), new GradientColorKey(color, 1f) },
+            new GradientAlphaKey[] { new GradientAlphaKey(alpha, 0f), new GradientAlphaKey(alpha, 1f) }
+        );
         lr.colorGradient = gradient;
     }
 }
