@@ -77,30 +77,17 @@ public class SmokeTracerManager : MonoBehaviour
         GameObject tracer = Instantiate(tracerPrefab, start, Quaternion.identity);
         LineRenderer lr = tracer.GetComponent<LineRenderer>();
 
-        // 탄도는 직선이므로 점 2개면 충분
         lr.positionCount = 2;
-        lr.SetPosition(0, start);
-        lr.SetPosition(1, end);
+        lr.SetPosition(0, start); // 시작점 (총구)
+        lr.SetPosition(1, end);   // 끝점 (과녁)
 
-        // ★ 여기서 탄도의 두께를 적용
         lr.widthMultiplier = tracerWidth;
         lr.useWorldSpace = true;
 
-        float timer = 0f;
-        // ★ 여기서 탄도의 수명(tracerDuration) 동안 루프
-        while (timer < tracerDuration)
-        {
-            timer += Time.deltaTime;
-            float progress = timer / tracerDuration; // 0.0 ~ 1.0
+        // [핵심] 복잡한 Alpha 계산 루프 삭제!
+        // 탄도가 잠깐 번쩍였다가 알아서 사라지게 기다리기만 합니다.
+        yield return new WaitForSeconds(tracerDuration);
 
-            // 서서히 사라지게 만들기 (Alpha 1 -> 0)
-            float alpha = Mathf.Lerp(1f, 0f, progress);
-
-            // 사용자가 설정한 HDR 색상과 Alpha 적용
-            SetLineColorAlpha(lr, tracerColor, alpha);
-
-            yield return null;
-        }
         Destroy(tracer);
     }
 

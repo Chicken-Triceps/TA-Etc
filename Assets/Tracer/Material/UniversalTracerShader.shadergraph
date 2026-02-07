@@ -392,6 +392,9 @@
         },
         {
             "m_Id": "b28335ebd7f04211805e7bf35b4ae6f9"
+        },
+        {
+            "m_Id": "0b115cdbc00144618839c849feffb329"
         }
     ],
     "m_Edges": [
@@ -2216,6 +2219,26 @@
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
     "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.StickyNoteData",
+    "m_ObjectId": "0b115cdbc00144618839c849feffb329",
+    "m_Title": "ACT",
+    "m_Content": "텍스처 수정 시 보완 필",
+    "m_TextSize": 0,
+    "m_Theme": 0,
+    "m_Position": {
+        "serializedVersion": "2",
+        "x": 2391.0,
+        "y": 5068.0,
+        "width": 200.0,
+        "height": 52.078125
+    },
+    "m_Group": {
+        "m_Id": ""
+    }
 }
 
 {
@@ -4265,10 +4288,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1177.0,
-            "y": 4330.00048828125,
+            "x": -1225.0,
+            "y": 4306.0,
             "width": 126.0,
-            "height": 118.0
+            "height": 117.99951171875
         }
     },
     "m_Slots": [
@@ -8414,10 +8437,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 2339.0,
-            "y": 4981.0,
+            "x": 2400.000244140625,
+            "y": 5015.0,
             "width": 177.0,
-            "height": 34.0
+            "height": 34.00048828125
         }
     },
     "m_Slots": [
