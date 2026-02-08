@@ -2069,7 +2069,7 @@ MonoBehaviour:
   resolution: 83
   tracerDuration: 0.3
   tracerWidth: 0.02
-  tracerColor: {r: 20.865902, g: 20.767479, b: 20.767479, a: 1}
+  tracerColor: {r: 0.60839283, g: 0.60552305, b: 0.60552305, a: 1}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
