@@ -559,8 +559,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.03849682, y: 0.47641736, z: -0.020883273, w: -0.8781278}
-  m_LocalPosition: {x: 18.813715, y: 3.06868, z: -4.6001186}
+  m_LocalRotation: {x: -0.06454352, y: 0.40864778, z: -0.028980736, w: -0.9099457}
+  m_LocalPosition: {x: 16.588827, y: 2.3687341, z: -6.236035}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2064,11 +2064,14 @@ MonoBehaviour:
   tracerPrefab: {fileID: 4405950564042710177, guid: 883aa0465a6e7b3459c3a8ea5be7f0cb, type: 3}
   firePoint: {fileID: 1709434737}
   targetPoint: {fileID: 1485253677}
-  smokeDuration: 1
+  flySpeed: 200
+  lingerDuration: 0.1
+  dissolveDuration: 0.5
+  dissolveSmoothness: -1
+  smokeResolution: 73
   smokeWidth: 0.05
-  resolution: 83
-  tracerDuration: 0.3
-  tracerWidth: 0.02
+  tracerWidth: 0.01
+  smokeColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.2}
   tracerColor: {r: 0.60839283, g: 0.60552305, b: 0.60552305, a: 1}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
